@@ -1,0 +1,63 @@
+﻿@model UserApplication.Models.SignUpModel
+
+@{
+    ViewBag.Title = "SignUp";
+    //var SuccessMessage = ViewBag.Success as string;
+    //var ErrorMessage = ViewBag.Success as string;
+}
+
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.ErrorMessage
+    </div>}
+
+<h2>Sign Up</h2>
+
+@using (Html.BeginForm("SignUp", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.First_Name)
+        @Html.TextBoxFor(m => m.First_Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.First_Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Last_Surname)
+        @Html.TextBoxFor(m => m.Last_Surname, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Last_Surname)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ProfilePicture, "Profile Picture")
+        @Html.TextBoxFor(m => m.ProfilePicture, new { type = "file", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ProfilePicture)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+}
+
+@*@if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+    {
+    <div>
+        <h3>Profile Picture:</h3>
+        <img src="@Model.ProfilePictureUrl" alt="Profile Picture" style="width: 150px; height: auto;" />
+    </div>
+    }*@
+
+
+
