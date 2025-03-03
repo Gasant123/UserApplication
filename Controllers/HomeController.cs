@@ -16,7 +16,7 @@ namespace UserApplication.Controllers
 
         public HomeController()
         {
-            _userRepository = new UserRepository(); // Create an instance of the repository
+            _userRepository = new UserRepository();
         }
 
         public ActionResult Index()
@@ -73,16 +73,15 @@ namespace UserApplication.Controllers
                     ProfilePictureUrl = model.ProfilePictureUrl
                 };
 
-                _userRepository.AddUser(user);
-
                 if (_userRepository.CheckForDuplicateEmail(model.Email))
                 {
-                    TempData["SuccessMessage"] = "The record was created successfully!";
+                    TempData["ErrorMessage"] = "Duplicate email , please use alternative.";
                 }
 
                 else
                 {
-                    TempData["ErrorMessage"] = "Duplicate email , please use alternative.";
+                    _userRepository.AddUser(user);
+                    TempData["SuccessMessage"] = "The record was created successfully!";
                 }
                 
                 return RedirectToAction("SignUp");
@@ -90,11 +89,6 @@ namespace UserApplication.Controllers
 
             return View();
         }
-
-        //public ActionResult SignUpSuccess()
-        //{
-        //    return View();
-        //}
 
     }
 }
