@@ -1,0 +1,141 @@
+﻿@model UserApplication.Models.SignUpNewModel
+
+@{
+    ViewData["Title"] = "Multi-step Sign Up";
+}
+
+@using (Html.BeginForm("SignUpUpdated", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <h2>Sign Up</h2>
+    <div class="sign-up-page">
+        <div class="container">
+            <div class="row justify-content-center align-items-center" style="height: 100vh;">
+                <div>
+
+                    <div class="form-container">
+                        @Html.AntiForgeryToken()
+
+                        <div class="progress">
+                            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <br />
+
+
+                        <!-- Step 1: Personal Information -->
+                        <div class="step" id="step1" style="display: @(Model.CurrentStep == 1 ? "block" : "none")">
+                            <h3>Step 1: Personal Information</h3>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.First_Name)
+                                @Html.TextBoxFor(m => m.First_Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.First_Name)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Last_Name)
+                                @Html.TextBoxFor(m => m.Last_Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Last_Name)
+                            </div>
+                            <button type="button" class="btn btn-primary next-btn" data-next-step="2">Next</button>
+                        </div>
+
+                        <!-- Step 2: Contact Information -->
+                        <div class="step" id="step2" style="display: @(Model.CurrentStep == 2 ? "block" : "none")">
+                            <h3>Step 2: Contact Information</h3>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Email)
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Phone)
+                                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Phone)
+                            </div>
+                            <button type="button" class="btn btn-primary next-btn" data-next-step="3">Next</button>
+
+                            <div class="text-center">
+                                <button type="button" class="btn btn-link , text-center, next-btn" data-next-step="1">Back</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Profile Picture -->
+                        <div class="step" id="step3" style="display: @(Model.CurrentStep == 3 ? "block" : "none")">
+                            <h3>Step 3: Upload Profile Picture</h3>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ProfilePicture)
+                                @Html.TextBoxFor(m => m.ProfilePicture, new { type = "file", @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.ProfilePicture)
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+
+                            <div class="text-center">
+                                <button type="button" class="btn btn-link , text-center, next-btn" data-next-step="2">Back</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<!-- Include jQuery and Bootstrap JS for client-side interactivity -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+
+    .sign-up-page body, .sign-up-page html {
+        height: 100%;
+        margin: 0;
+        background-image: url("~/Content/Background.jpg");
+    }
+
+    .sign-up-page .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .sign-up-page .form-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sign-up-page .form-group {
+        margin-bottom: 15px;
+    }
+
+    .sign-up-page .btn-primary {
+        width: 100%;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".next-btn").click(function () {
+            var nextStep = $(this).data("next-step");
+            $("form").find(".step").each(function () {
+                $(this).hide();
+            });
+            $("#step" + nextStep).show();
+
+            // Update current step in the model (This could also be done via hidden fields or Ajax)
+            var form = $("form");
+            var currentStepField = $("<input>").attr("type", "hidden").attr("name", "CurrentStep").val(nextStep);
+            form.append(currentStepField);
+
+            var progressPercentage = (nextStep) * 33;  // Each step represents 33%
+            console.log(progressPercentage);
+            $("#progress-bar").css("width", progressPercentage + "%");
+            $("#progress-bar").attr("aria-valuenow", progressPercentage);
+        });
+    });
+</script>
+

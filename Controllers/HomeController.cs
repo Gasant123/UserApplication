@@ -90,5 +90,60 @@ namespace UserApplication.Controllers
             return View();
         }
 
+        public ActionResult SignUpUpdated()
+        {
+            var successMessage = TempData["SuccessMessage"] as string;
+
+            ViewBag.SuccessMessage = successMessage;
+
+            var errorMessage = TempData["errorMessage"] as string;
+
+            ViewBag.ErrorMessage = errorMessage;
+
+            SignUpNewModel test = new SignUpNewModel();
+
+            return View(test);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignUpUpdated(SignUpNewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (model.ProfilePicture != null && model.ProfilePicture.ContentLength > 0)
+                {
+                    var imageUrl = CloudinaryHelper.UploadImage(model.ProfilePicture.InputStream, model.ProfilePicture.FileName);
+
+                    model.ProfilePictureUrl = imageUrl;
+                }
+
+                var user = new User
+                {
+                    Name = model.First_Name,
+                    Surname = model.Last_Name,
+                    Email = model.Email,
+                    Phone = model.Phone,
+                    ProfilePictureUrl = model.ProfilePictureUrl
+                };
+
+                if (_userRepository.CheckForDuplicateEmail(model.Email))
+                {
+                    TempData["ErrorMessage"] = "Duplicate email , please use alternative.";
+                }
+
+                else
+                {
+                    _userRepository.AddUser(user);
+                    TempData["SuccessMessage"] = "The record was created successfully!";
+                }
+
+                return RedirectToAction("SignUpUpdated");
+            }
+
+            return View();
+        }
+
     }
 }

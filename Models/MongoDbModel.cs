@@ -16,6 +16,7 @@ namespace UserApplication.Models
             public string Name { get; set; }
             public string Surname { get; set; }
             public string Email { get; set; }
+            public string Phone { get; set; }
             public string ProfilePictureUrl { get; set; } // Store the URL of the profile picture
         }
 
