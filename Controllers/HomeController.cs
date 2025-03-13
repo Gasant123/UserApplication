@@ -133,6 +133,11 @@ namespace UserApplication.Controllers
                     TempData["ErrorMessage"] = "Duplicate email , please use alternative.";
                 }
 
+                else if (_userRepository.CheckForDuplicateNumber(model.Phone))
+                {
+                    TempData["ErrorMessage"] = "Duplicate phone number , please use alternative.";
+                }
+
                 else
                 {
                     _userRepository.AddUser(user);

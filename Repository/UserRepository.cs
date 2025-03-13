@@ -21,7 +21,7 @@ namespace UserApplication.Repository
 
         public void AddUser(User user)
         {
-            if (CheckForDuplicateEmail(user.Email) == false)
+            if (CheckForDuplicateEmail(user.Email) == false && CheckForDuplicateNumber(user.Phone)  == false )
             {
                 _context.Users.InsertOne(user);
             }
@@ -42,6 +42,27 @@ namespace UserApplication.Repository
                 
                 return true;            
                 
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool CheckForDuplicateNumber(string phone_num)
+        {
+            try
+            {
+                var duplicate = _context.Users.AsQueryable()
+                                  .FirstOrDefault(p => p.Phone == phone_num);
+
+                if (duplicate == null)              //Not in the db
+                {
+                    return false;
+                }
+
+                return true;
+
             }
             catch
             {
