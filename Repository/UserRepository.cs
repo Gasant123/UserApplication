@@ -20,12 +20,8 @@ namespace UserApplication.Repository
         }
 
         public void AddUser(User user)
-        {
-            if (CheckForDuplicateEmail(user.Email) == false && CheckForDuplicateNumber(user.Phone)  == false )
-            {
-                _context.Users.InsertOne(user);
-            }
-       
+        {            
+            _context.Users.InsertOne(user);                  
         }
 
         public bool CheckForDuplicateEmail(string email)
