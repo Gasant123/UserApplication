@@ -147,7 +147,7 @@ namespace UserApplication.Controllers
                 return RedirectToAction("SignUpUpdated");
             }
 
-            return View();
+            return View(model);
         }
 
     }
