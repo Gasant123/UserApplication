@@ -8,8 +8,15 @@ namespace UserApplication.Models
 {
     public class SignUpNewModel
     {
+        [Required]
+        [StringLength(100)]
         public string First_Name { get; set; }
+        [Required]
+        [StringLength(100)]
         public string Last_Name { get; set; }
+
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone number is required.")]
@@ -17,6 +24,7 @@ namespace UserApplication.Models
         ErrorMessage = "Please enter a valid phone number.")]
         public string Phone { get; set; }
         //public IFormFile ProfilePicture { get; set; }
+        [Required]
         public HttpPostedFileBase ProfilePicture { get; set; }
         public string ProfilePictureUrl { get; set; } // Add this property to store the URL
 
